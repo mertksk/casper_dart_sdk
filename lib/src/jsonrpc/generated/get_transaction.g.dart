@@ -39,7 +39,9 @@ Map<String, dynamic> _$GetTransactionResultToJson(
 PutTransactionParams _$PutTransactionParamsFromJson(
   Map<String, dynamic> json,
 ) => PutTransactionParams(
-  TransactionCondor.fromJson(json['transaction'] as Map<String, dynamic>),
+  transaction: TransactionCondor.fromJson(
+    json['transaction'] as Map<String, dynamic>,
+  ),
 );
 
 Map<String, dynamic> _$PutTransactionParamsToJson(

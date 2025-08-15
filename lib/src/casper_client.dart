@@ -26,9 +26,10 @@ import 'package:casper_dart_sdk/src/types/deploy.dart';
 import 'package:casper_dart_sdk/src/types/global_state_key.dart';
 import 'package:casper_dart_sdk/src/types/named_arg.dart';
 import 'package:casper_dart_sdk/src/types/peer.dart';
-import 'package:casper_dart_sdk/src/types/transaction.dart';
+import 'package:casper_dart_sdk/src/types/transaction_condor.dart';
 import 'package:casper_dart_sdk/src/types/transaction_v1.dart';
-import 'package:casper_dart_sdk/src/network_detector.dart';
+import 'package:casper_dart_sdk/src/network_detector.dart' hide NetworkVersion;
+import 'package:casper_dart_sdk/src/network_detector.dart' as network show NetworkVersion;
 
 /// Main client for interacting with the Casper network
 /// Supports both legacy (Deploy) and Condor (Transaction) formats
@@ -47,7 +48,7 @@ class CasperClient {
   NetworkAwareCasperClient get networkClient => _networkClient;
 
   /// Detects the network version (legacy vs condor)
-  Future<NetworkVersion> detectNetworkVersion() async {
+  Future<network.NetworkVersion> detectNetworkVersion() async {
     return await _networkClient.getNetworkVersion();
   }
 
@@ -56,8 +57,8 @@ class CasperClient {
   Future<dynamic> send(dynamic transactionOrDeploy) async {
     final version = await detectNetworkVersion();
 
-    if (version == NetworkVersion.condor) {
-      if (transactionOrDeploy is Transaction) {
+    if (version == network.NetworkVersion.condor) {
+      if (transactionOrDeploy is TransactionCondor) {
         return putTransaction(transactionOrDeploy);
       } else if (transactionOrDeploy is TransactionV1) {
         return putTransactionV1(transactionOrDeploy);
@@ -75,7 +76,7 @@ class CasperClient {
   Future<dynamic> get(dynamic hash) async {
     final version = await detectNetworkVersion();
 
-    if (version == NetworkVersion.condor) {
+    if (version == network.NetworkVersion.condor) {
       return getTransaction(hash);
     } else {
       return getDeploy(hash);
@@ -90,20 +91,20 @@ class CasperClient {
     BigInt paymentAmount,
     String chainName, {
     int? idTransfer,
-    BigInt gasPrice = BigInt.one,
+    BigInt? gasPrice,
     Duration ttl = const Duration(minutes: 30),
   }) async {
     final version = await detectNetworkVersion();
 
-    if (version == NetworkVersion.condor) {
-      return Transaction.standardTransfer(
+    if (version == network.NetworkVersion.condor) {
+      return TransactionCondor.standardTransfer(
         from,
         to,
         amount,
         paymentAmount,
         chainName,
         idTransfer: idTransfer,
-        gasPrice: gasPrice,
+        gasPrice: gasPrice ?? BigInt.one,
         ttl: ttl,
       );
     } else {
@@ -113,9 +114,9 @@ class CasperClient {
         amount,
         paymentAmount,
         chainName,
-        idTransfer: idTransfer,
-        gasPrice: gasPrice.toInt(),
-        ttl: ttl,
+        idTransfer,
+        (gasPrice ?? BigInt.one).toInt(),
+        ttl,
       );
     }
   }
@@ -135,13 +136,13 @@ class CasperClient {
   /// Condor methods (new transaction format)
 
   /// Puts a transaction to the network (Condor)
-  Future<PutTransactionResult> putTransaction(Transaction transaction) async {
+  Future<PutTransactionResult> putTransaction(TransactionCondor transaction) async {
     return await _nodeClient.putTransaction(transaction);
   }
 
-  /// Puts a transaction V1 to the network (Condor)
+  /// Puts a transaction V1 to the network (Condor) - Not implemented yet
   Future<PutTransactionResult> putTransactionV1(TransactionV1 transaction) async {
-    return await _nodeClient.putTransactionV1(transaction);
+    throw UnimplementedError('TransactionV1 support not implemented yet');
   }
 
   /// Gets transaction information (Condor)
@@ -257,19 +258,16 @@ class CasperClient {
 /// Enhanced CasperNodeRpcClient with Condor support
 extension CondorCasperNodeRpcClient on CasperNodeRpcClient {
   /// Puts a transaction to the network (Condor)
-  Future<PutTransactionResult> putTransaction(Transaction transaction) async {
+  Future<PutTransactionResult> putTransaction(TransactionCondor transaction) async {
     return await call<PutTransactionResult>(
       RpcMethodName.accountPutTransaction,
       PutTransactionParams(transaction: transaction),
     );
   }
 
-  /// Puts a transaction V1 to the network (Condor)
+  /// Puts a transaction V1 to the network (Condor) - Not implemented yet
   Future<PutTransactionResult> putTransactionV1(TransactionV1 transaction) async {
-    return await call<PutTransactionResult>(
-      RpcMethodName.accountPutTransaction,
-      PutTransactionParams(transactionV1: transaction),
-    );
+    throw UnimplementedError('TransactionV1 support not implemented yet');
   }
 
   /// Gets transaction information (Condor)

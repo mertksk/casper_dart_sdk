@@ -119,6 +119,46 @@ class TransactionCondor implements ByteSerializable {
     hash = Cep57Checksum.encode(headerHash);
   }
 
+  /// Creates a standard transfer transaction (static factory method)
+  static TransactionCondor standardTransfer(
+    ClPublicKey from,
+    ClPublicKey to,
+    BigInt amount,
+    BigInt paymentAmount,
+    String chainName, {
+    int? idTransfer,
+    BigInt gasPrice = BigInt.one,
+    Duration ttl = const Duration(minutes: 30),
+  }) {
+    return TransactionCondor.transfer(
+      from,
+      to,
+      amount,
+      chainName,
+      id: idTransfer,
+      gasPrice: gasPrice,
+      ttl: ttl,
+    );
+  }
+
+  /// Creates a contract deployment transaction (static factory method)
+  static TransactionCondor contract(
+    Uint8List wasmBytes,
+    ClPublicKey from,
+    BigInt paymentAmount,
+    String chainName, {
+    BigInt gasPrice = BigInt.one,
+    Duration ttl = const Duration(minutes: 30),
+  }) {
+    return TransactionCondor.deployWasm(
+      wasmBytes,
+      from,
+      chainName,
+      gasPrice: gasPrice,
+      ttl: ttl,
+    );
+  }
+
   Future<Uint8List> sign(KeyPair pair) async {
     Uint8List signatureBytes = await pair.sign(Uint8List.fromList(hex.decode(hash)));
     addApproval(TransactionApproval(pair.publicKey, ClSignature.fromBytes(signatureBytes, pair.publicKey.keyAlgorithm)));

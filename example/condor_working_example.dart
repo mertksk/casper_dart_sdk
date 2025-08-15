@@ -1,9 +1,6 @@
 import 'dart:io';
 
 import 'package:casper_dart_sdk/casper_dart_sdk.dart';
-import 'package:casper_dart_sdk/src/casper_client_simple.dart';
-import 'package:casper_dart_sdk/src/crpyt/key_pair.dart';
-import 'package:casper_dart_sdk/src/types/cl_public_key.dart';
 
 /// Complete working example for Condor network
 /// This example demonstrates how to use the Casper Dart SDK with Condor compatibility
@@ -14,16 +11,16 @@ Future<void> main() async {
   final chainName = 'casper-test'; // Change based on your network
 
   // Create client
-  final client = CasperClientSimple(nodeUrl);
+  final client = CasperClient(nodeUrl);
 
   try {
     // Test network connection
     print('🔍 Testing network connection...');
-    final status = await client._client.getStatus();
+    final status = await client.getStatus();
     print('✅ Connected to network: ${status.chainName}');
 
     // Detect network version
-    final version = await client._client.detectNetworkVersion();
+    final version = await client.detectNetworkVersion();
     print('📡 Network version: $version');
 
     // Load keys (example - replace with your actual keys)
@@ -44,13 +41,20 @@ Future<void> main() async {
     print('✍️ Signing transaction...');
     if (transfer is Deploy) {
       await transfer.sign(senderKeyPair);
-    } else if (transfer is Transaction) {
+    } else if (transfer is TransactionCondor) {
       await transfer.sign(senderKeyPair);
     }
 
     // Send transaction
     print('🚀 Sending transaction...');
-    final hash = await client.send(transfer);
+    final result = await client.send(transfer);
+    
+    String hash;
+    if (result.runtimeType.toString().contains('PutDeploy')) {
+      hash = (result as dynamic).deployHash;
+    } else {
+      hash = (result as dynamic).transactionHash;
+    }
     print('✅ Transaction sent! Hash: $hash');
 
     // Wait for confirmation
@@ -58,36 +62,32 @@ Future<void> main() async {
     await _waitForConfirmation(client, hash);
 
     // Get transaction details
-    final details = await client.getTransaction(hash);
+    final details = await client.get(hash);
     print('📋 Transaction details: $details');
 
   } catch (e) {
     print('❌ Error: $e');
   } finally {
-    client.close();
+    client.clearNetworkCache();
   }
 }
 
 Future<KeyPair> _loadKeyPair() async {
-  // Example: Load from environment or file
-  // In production, use secure key management
-  final privateKeyHex = Platform.environment['CASPER_PRIVATE_KEY'] ??
-      'your-private-key-here';
-  return KeyPair.fromPrivateKeyHex(privateKeyHex);
+  // For testing, just generate a new key pair
+  return await Ed25519KeyPair.generate();
 }
 
 Future<KeyPair> _loadRecipientKeyPair() async {
-  // Example: Generate a new key pair for recipient
-  return KeyPair.fromRandom(KeyAlgorithm.ed25519);
+  return await Ed25519KeyPair.generate();
 }
 
-Future<void> _waitForConfirmation(CasperClientSimple client, String hash) async {
+Future<void> _waitForConfirmation(CasperClient client, String hash) async {
   const maxAttempts = 30;
   const delay = Duration(seconds: 2);
 
   for (var i = 0; i < maxAttempts; i++) {
     try {
-      final details = await client.getTransaction(hash);
+      final details = await client.get(hash);
       if (details != null) {
         print('✅ Transaction confirmed!');
         return;

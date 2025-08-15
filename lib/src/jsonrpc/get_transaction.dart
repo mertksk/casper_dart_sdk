@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:casper_dart_sdk/src/types/transaction_condor.dart';
+import 'package:casper_dart_sdk/src/types/transaction_v1.dart';
 import 'package:casper_dart_sdk/src/jsonrpc/rpc_params.dart';
 import 'package:casper_dart_sdk/src/jsonrpc/rpc_result.dart';
 
@@ -33,7 +34,7 @@ class GetTransactionResult extends RpcResult {
 class PutTransactionParams extends RpcParams {
   final TransactionCondor transaction;
 
-  PutTransactionParams(this.transaction);
+  PutTransactionParams({required this.transaction});
 
   factory PutTransactionParams.fromJson(Map<String, dynamic> json) => _$PutTransactionParamsFromJson(json);
   Map<String, dynamic> toJson() => _$PutTransactionParamsToJson(this);
