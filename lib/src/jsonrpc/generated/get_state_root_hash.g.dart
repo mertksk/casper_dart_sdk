@@ -7,27 +7,25 @@ part of '../get_state_root_hash.dart';
 // **************************************************************************
 
 GetStateRootHashParams _$GetStateRootHashParamsFromJson(
-        Map<String, dynamic> json) =>
-    GetStateRootHashParams(
-      BlockId.fromJson(json['block_identifier'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => GetStateRootHashParams(
+  BlockId.fromJson(json['block_identifier'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$GetStateRootHashParamsToJson(
-        GetStateRootHashParams instance) =>
-    <String, dynamic>{
-      'block_identifier': instance.blockIdentifier.toJson(),
-    };
+  GetStateRootHashParams instance,
+) => <String, dynamic>{'block_identifier': instance.blockIdentifier.toJson()};
 
 GetStateRootHashResult _$GetStateRootHashResultFromJson(
-        Map<String, dynamic> json) =>
-    GetStateRootHashResult(
-      json['api_version'],
-      json['state_root_hash'] as String,
-    );
+  Map<String, dynamic> json,
+) => GetStateRootHashResult(
+  json['api_version'],
+  json['state_root_hash'] as String,
+);
 
 Map<String, dynamic> _$GetStateRootHashResultToJson(
-        GetStateRootHashResult instance) =>
-    <String, dynamic>{
-      'api_version': instance.apiVersion,
-      'state_root_hash': instance.stateRootHash,
-    };
+  GetStateRootHashResult instance,
+) => <String, dynamic>{
+  'api_version': instance.apiVersion,
+  'state_root_hash': instance.stateRootHash,
+};

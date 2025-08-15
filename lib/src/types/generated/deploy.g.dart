@@ -7,38 +7,38 @@ part of '../deploy.dart';
 // **************************************************************************
 
 Deploy _$DeployFromJson(Map<String, dynamic> json) => Deploy(
-      const Cep57ChecksummedHexJsonConverter().fromJson(json['hash'] as String),
-      DeployHeader.fromJson(json['header'] as Map<String, dynamic>),
-      const ExecutableDeployItemJsonConverter()
-          .fromJson(json['payment'] as Map<String, dynamic>),
-      const ExecutableDeployItemJsonConverter()
-          .fromJson(json['session'] as Map<String, dynamic>),
-      (json['approvals'] as List<dynamic>)
-          .map((e) => DeployApproval.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  const Cep57ChecksummedHexJsonConverter().fromJson(json['hash'] as String),
+  DeployHeader.fromJson(json['header'] as Map<String, dynamic>),
+  const ExecutableDeployItemJsonConverter().fromJson(
+    json['payment'] as Map<String, dynamic>,
+  ),
+  const ExecutableDeployItemJsonConverter().fromJson(
+    json['session'] as Map<String, dynamic>,
+  ),
+  (json['approvals'] as List<dynamic>)
+      .map((e) => DeployApproval.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$DeployToJson(Deploy instance) => <String, dynamic>{
-      'hash': const Cep57ChecksummedHexJsonConverter().toJson(instance.hash),
-      'header': instance.header.toJson(),
-      'payment':
-          const ExecutableDeployItemJsonConverter().toJson(instance.payment),
-      'session':
-          const ExecutableDeployItemJsonConverter().toJson(instance.session),
-      'approvals': instance.approvals.map((e) => e.toJson()).toList(),
-    };
+  'hash': const Cep57ChecksummedHexJsonConverter().toJson(instance.hash),
+  'header': instance.header.toJson(),
+  'payment': const ExecutableDeployItemJsonConverter().toJson(instance.payment),
+  'session': const ExecutableDeployItemJsonConverter().toJson(instance.session),
+  'approvals': instance.approvals.map((e) => e.toJson()).toList(),
+};
 
 DeployHeader _$DeployHeaderFromJson(Map<String, dynamic> json) => DeployHeader(
-      const ClPublicKeyJsonConverter().fromJson(json['account'] as String),
-      const DateTimeJsonConverter().fromJson(json['timestamp'] as String),
-      const HumanReadableDurationJsonConverter()
-          .fromJson(json['ttl'] as String),
-      json['gas_price'] as int,
-      const Cep57ChecksummedHexJsonConverter()
-          .fromJson(json['body_hash'] as String),
-      (json['dependencies'] as List<dynamic>).map((e) => e as String).toList(),
-      json['chain_name'] as String,
-    );
+  const ClPublicKeyJsonConverter().fromJson(json['account'] as String),
+  const DateTimeJsonConverter().fromJson(json['timestamp'] as String),
+  const HumanReadableDurationJsonConverter().fromJson(json['ttl'] as String),
+  (json['gas_price'] as num).toInt(),
+  const Cep57ChecksummedHexJsonConverter().fromJson(
+    json['body_hash'] as String,
+  ),
+  (json['dependencies'] as List<dynamic>).map((e) => e as String).toList(),
+  json['chain_name'] as String,
+);
 
 Map<String, dynamic> _$DeployHeaderToJson(DeployHeader instance) =>
     <String, dynamic>{
@@ -46,8 +46,9 @@ Map<String, dynamic> _$DeployHeaderToJson(DeployHeader instance) =>
       'timestamp': const DateTimeJsonConverter().toJson(instance.timestamp),
       'ttl': const HumanReadableDurationJsonConverter().toJson(instance.ttl),
       'gas_price': instance.gasPrice,
-      'body_hash':
-          const Cep57ChecksummedHexJsonConverter().toJson(instance.bodyHash),
+      'body_hash': const Cep57ChecksummedHexJsonConverter().toJson(
+        instance.bodyHash,
+      ),
       'dependencies': instance.dependencies,
       'chain_name': instance.chainName,
     };
@@ -65,14 +66,14 @@ Map<String, dynamic> _$DeployApprovalToJson(DeployApproval instance) =>
     };
 
 DeployInfo _$DeployInfoFromJson(Map<String, dynamic> json) => DeployInfo(
-      json['deploy_hash'] as String,
-      const AccountHashKeyJsonConverter().fromJson(json['from'] as String),
-      BigInt.parse(json['gas'] as String),
-      const UrefJsonConverter().fromJson(json['source'] as String),
-      (json['transfers'] as List<dynamic>)
-          .map((e) => const TransferKeyJsonConverter().fromJson(e as String))
-          .toList(),
-    );
+  json['deploy_hash'] as String,
+  const AccountHashKeyJsonConverter().fromJson(json['from'] as String),
+  BigInt.parse(json['gas'] as String),
+  const UrefJsonConverter().fromJson(json['source'] as String),
+  (json['transfers'] as List<dynamic>)
+      .map((e) => const TransferKeyJsonConverter().fromJson(e as String))
+      .toList(),
+);
 
 Map<String, dynamic> _$DeployInfoToJson(DeployInfo instance) =>
     <String, dynamic>{

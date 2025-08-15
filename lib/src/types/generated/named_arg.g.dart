@@ -7,11 +7,11 @@ part of '../named_arg.dart';
 // **************************************************************************
 
 NamedArg _$NamedArgFromJson(Map<String, dynamic> json) => NamedArg(
-      json['name'] as String,
-      ClValue.fromJson(json['value'] as Map<String, dynamic>),
-    );
+  json['name'] as String,
+  ClValue.fromJson(json['value'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$NamedArgToJson(NamedArg instance) => <String, dynamic>{
-      'name': instance.name,
-      'value': instance.value.toJson(),
-    };
+  'name': instance.name,
+  'value': instance.value.toJson(),
+};

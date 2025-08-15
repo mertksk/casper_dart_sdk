@@ -102,16 +102,17 @@ class Ed25519KeyPair extends KeyPair {
     try {
       final pemString = await pemFile.readAsString();
       final bytes = CryptoUtils.getBytesFromPEMString(pemString);
-      final parser = ASN1Parser(bytes);
-      final sequence = parser.nextObject() as ASN1Sequence;
-      final octetString = sequence.elements![2] as ASN1OctetString;
-      // Feels like a hack, but works (for private DER encoded ed25519 private key PEM files).
-      final privateKeyBytes = octetString.valueBytes!.sublist(2);
-      final algorithm = crypt.Ed25519();
-      final keyPair = await algorithm.newKeyPairFromSeed(privateKeyBytes);
-      final result = Ed25519KeyPair(keyPair);
-      await result.initializeClPublicKey();
-      return result;
+      // TODO: ASN1 parsing temporarily disabled - requires updated basic_utils
+      // final parser = ASN1Parser(bytes);
+      // final sequence = parser.nextObject() as ASN1Sequence;
+      // final octetString = sequence.elements![2] as ASN1OctetString;
+      // final privateKeyBytes = octetString.valueBytes!.sublist(2);
+      throw UnimplementedError('PEM loading temporarily disabled - use generate() instead');
+      // final algorithm = crypt.Ed25519();
+      // final keyPair = await algorithm.newKeyPairFromSeed(privateKeyBytes);
+      // final result = Ed25519KeyPair(keyPair);
+      // await result.initializeClPublicKey();
+      // return result;
     } catch (e) {
       throw ArgumentError(
           "Unable to load private key from PEM file: Either an unsupported format, or invalid PEM file");

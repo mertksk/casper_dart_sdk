@@ -7,16 +7,15 @@ part of '../cl_value.dart';
 // **************************************************************************
 
 ClValue _$ClValueFromJson(Map<String, dynamic> json) => ClValue(
-      const ClTypeDescriptorJsonConverter().fromJson(json['cl_type']),
-      const HexBytesWithCep57ChecksumConverter()
-          .fromJson(json['bytes'] as String),
-      json['parsed'],
-    );
+  const ClTypeDescriptorJsonConverter().fromJson(json['cl_type']),
+  const HexBytesWithCep57ChecksumConverter().fromJson(json['bytes'] as String),
+  json['parsed'],
+);
 
 Map<String, dynamic> _$ClValueToJson(ClValue instance) => <String, dynamic>{
-      'cl_type': const ClTypeDescriptorJsonConverter()
-          .toJson(instance.clTypeDescriptor),
-      'bytes':
-          const HexBytesWithCep57ChecksumConverter().toJson(instance.bytes),
-      'parsed': instance.parsed,
-    };
+  'cl_type': const ClTypeDescriptorJsonConverter().toJson(
+    instance.clTypeDescriptor,
+  ),
+  'bytes': const HexBytesWithCep57ChecksumConverter().toJson(instance.bytes),
+  'parsed': instance.parsed,
+};

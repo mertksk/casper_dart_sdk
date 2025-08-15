@@ -7,44 +7,54 @@ part of '../era.dart';
 // **************************************************************************
 
 EraInfo _$EraInfoFromJson(Map<String, dynamic> json) => EraInfo(
-      const SeigniorageAllocationJsonListConverter()
-          .fromJson(json['seigniorage_allocations'] as List),
-    );
+  const SeigniorageAllocationJsonListConverter().fromJson(
+    json['seigniorage_allocations'] as List,
+  ),
+);
 
 Map<String, dynamic> _$EraInfoToJson(EraInfo instance) => <String, dynamic>{
-      'seigniorage_allocations': const SeigniorageAllocationJsonListConverter()
-          .toJson(instance.seigniorageAllocations),
-    };
+  'seigniorage_allocations': const SeigniorageAllocationJsonListConverter()
+      .toJson(instance.seigniorageAllocations),
+};
 
 EraSummary _$EraSummaryFromJson(Map<String, dynamic> json) => EraSummary(
-      json['block_hash'] as String,
-      json['era_id'] as int,
-      const StoredValueJsonConverter()
-          .fromJson(json['stored_value'] as Map<String, dynamic>),
-      json['state_root_hash'] as String,
-      json['merkle_proof'] as String,
-    );
+  json['block_hash'] as String,
+  (json['era_id'] as num).toInt(),
+  _$JsonConverterFromJson<Map<String, dynamic>, dynamic>(
+    json['stored_value'],
+    const StoredValueJsonConverter().fromJson,
+  ),
+  json['state_root_hash'] as String,
+  json['merkle_proof'] as String,
+);
 
-Map<String, dynamic> _$EraSummaryToJson(EraSummary instance) =>
-    <String, dynamic>{
-      'block_hash': instance.blockHash,
-      'era_id': instance.eraId,
-      'stored_value':
-          const StoredValueJsonConverter().toJson(instance.storedValue),
-      'state_root_hash': instance.stateRootHash,
-      'merkle_proof': instance.merkleProof,
-    };
+Map<String, dynamic> _$EraSummaryToJson(
+  EraSummary instance,
+) => <String, dynamic>{
+  'block_hash': instance.blockHash,
+  'era_id': instance.eraId,
+  'stored_value': const StoredValueJsonConverter().toJson(instance.storedValue),
+  'state_root_hash': instance.stateRootHash,
+  'merkle_proof': instance.merkleProof,
+};
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) => json == null ? null : fromJson(json as Json);
 
 EraValidators _$EraValidatorsFromJson(Map<String, dynamic> json) =>
     EraValidators(
-      json['era_id'] as int,
-      const ValidatorWeightJsonListConverter()
-          .fromJson(json['validator_weights'] as List),
+      (json['era_id'] as num).toInt(),
+      const ValidatorWeightJsonListConverter().fromJson(
+        json['validator_weights'] as List,
+      ),
     );
 
 Map<String, dynamic> _$EraValidatorsToJson(EraValidators instance) =>
     <String, dynamic>{
       'era_id': instance.eraId,
-      'validator_weights': const ValidatorWeightJsonListConverter()
-          .toJson(instance.validatorWeights),
+      'validator_weights': const ValidatorWeightJsonListConverter().toJson(
+        instance.validatorWeights,
+      ),
     };

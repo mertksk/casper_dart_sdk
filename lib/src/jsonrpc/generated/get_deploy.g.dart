@@ -7,14 +7,10 @@ part of '../get_deploy.dart';
 // **************************************************************************
 
 GetDeployParams _$GetDeployParamsFromJson(Map<String, dynamic> json) =>
-    GetDeployParams(
-      json['deploy_hash'] as String,
-    );
+    GetDeployParams(json['deploy_hash'] as String);
 
 Map<String, dynamic> _$GetDeployParamsToJson(GetDeployParams instance) =>
-    <String, dynamic>{
-      'deploy_hash': instance.deployHash,
-    };
+    <String, dynamic>{'deploy_hash': instance.deployHash};
 
 GetDeployResult _$GetDeployResultFromJson(Map<String, dynamic> json) =>
     GetDeployResult(
