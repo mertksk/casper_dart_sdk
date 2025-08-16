@@ -14,6 +14,7 @@ import 'package:casper_dart_sdk/src/jsonrpc/get_status.dart';
 import 'package:casper_dart_sdk/src/jsonrpc/get_block.dart';
 import 'package:casper_dart_sdk/src/jsonrpc/put_deploy.dart';
 import 'package:casper_dart_sdk/src/jsonrpc/query_global_state.dart';
+import 'package:casper_dart_sdk/src/jsonrpc/get_transaction.dart';
 
 class CasperNodeRpcClient extends JsonRpcHttpServerProxy {
   CasperNodeRpcClient(url) : super(url, {'User-Agent': 'CasperDart/0.1'});
@@ -81,5 +82,17 @@ class CasperNodeRpcClient extends JsonRpcHttpServerProxy {
 
   Future<GetAccountInfoResult> getAccountInfo(GetAccountInfoParams params) async {
     return GetAccountInfoResult.fromJson(await call(RpcMethodName.stateGetAccountInfo, params.toJson()));
+  }
+
+  // Condor Transaction Methods
+
+  /// Puts a transaction to the network (Condor)
+  Future<PutTransactionResult> putTransaction(PutTransactionParams params) async {
+    return PutTransactionResult.fromJson(await call(RpcMethodName.accountPutTransaction, params.toJson()));
+  }
+
+  /// Gets transaction information (Condor)
+  Future<GetTransactionResult> getTransactionInfo(GetTransactionParams params) async {
+    return GetTransactionResult.fromJson(await call(RpcMethodName.infoGetTransaction, params.toJson()));
   }
 }

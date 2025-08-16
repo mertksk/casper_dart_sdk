@@ -127,7 +127,7 @@ class TransactionCondor implements ByteSerializable {
     BigInt paymentAmount,
     String chainName, {
     int? idTransfer,
-    BigInt gasPrice = BigInt.one,
+    BigInt? gasPrice,
     Duration ttl = const Duration(minutes: 30),
   }) {
     return TransactionCondor.transfer(
@@ -147,7 +147,7 @@ class TransactionCondor implements ByteSerializable {
     ClPublicKey from,
     BigInt paymentAmount,
     String chainName, {
-    BigInt gasPrice = BigInt.one,
+    BigInt? gasPrice,
     Duration ttl = const Duration(minutes: 30),
   }) {
     return TransactionCondor.deployWasm(

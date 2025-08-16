@@ -55,15 +55,12 @@ class NetworkDetector {
   /// Determines network version from node status
   NetworkVersion _determineVersionFromStatus(GetStatusResult status) {
     final apiVersion = status.apiVersion;
-    final protocolVersion = status.protocolVersion;
+    // Note: protocolVersion field not available in current GetStatusResult
+    // final protocolVersion = status.protocolVersion;
 
-    // Condor networks use protocol version 2.0.0 or higher
-    // and have specific API version patterns
+    // Check API version for Condor indicators since protocolVersion is not available
     try {
-      final protocolParts = protocolVersion.split('.');
-      final majorVersion = int.parse(protocolParts[0]);
-
-      if (majorVersion >= 2) {
+      if (apiVersion.contains('2.0') || apiVersion.contains('condor')) {
         return NetworkVersion.condor;
       }
 

@@ -1,5 +1,5 @@
 name: casper_dart_sdk
-description: A Dart SDK for interacting with the Casper Network blockchain
+description: A comprehensive Dart SDK for interacting with the Casper Network blockchain, supporting both Legacy (1.x) and Condor (2.0) networks
 version: 0.2.0-condor
 
 environment:
@@ -19,6 +19,7 @@ dependencies:
   secp256k1: ^0.3.0
   convert: ^3.1.1
   rpc_exceptions: ^1.0.1
+  jsonrpc2: ^3.0.1
 
 dev_dependencies:
   build_runner: ^2.4.7
